@@ -40,13 +40,12 @@
                                                 {{$bestMenu->category->category}}
                                             </div>
                                             <div class="price dark:text-darkMode md:text-lg text-[12px] font-semibold">
-                                                {{$bestMenu->price}}
+                                                @rupiah($bestMenu->price)
                                             </div>
                                         </div>
                                         <button
                                             class="order bg-black md:text-base text-white md:py-2 md:px-3 md:rounded-xl rounded text-[12px] w-full md:w-auto py-2"
-                                            onclick="handleOrderNow(this)" data-menu-id="{{$bestMenu->id}}">Order
-                                            Now</button>
+                                            onclick="handleOrderNow(this)" data-menu-id="{{$bestMenu->id}}">Add To Cart</button>
                                     </div>
                                 </div>
                             </div>
@@ -62,9 +61,11 @@
 
                 <div class="category py-3 w-full overflow-x-auto flex gap-3">
                     @foreach ($categories as $category)
-                    <div class="bg-black cursor-pointer text-white py-1 px-3 rounded-xl w-fit">{{$category->category}}
-                    </div>
+                    <a href="{{route('homepage', $category->id)}}" class="bg-black cursor-pointer text-white py-1 px-3 rounded-xl w-fit">{{$category->category}}
+                    </a>
                     @endforeach
+                    <a href="/" class="bg-black cursor-pointer text-white py-1 px-3 rounded-xl w-fit">All
+                    </a>
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -77,16 +78,16 @@
                             </div>
                             <div class="flex justify-between md:items-center md:flex-row flex-col gap-2">
                                 <div class="flex flex-col gap-1">
-                                    <div class="dark:text-darkMode md:text-sm text-[12px] text-gray-500">Healthy
+                                    <div class="dark:text-darkMode md:text-sm text-[12px] text-gray-500">
                                         {{$menu->category->category}}
                                     </div>
                                     <div class="price dark:text-darkMode md:text-lg text-[12px] font-semibold">
-                                        {{$menu->price}}
+                                        @rupiah($menu->price)
                                     </div>
                                 </div>
                                 <button
                                     class="order bg-black md:text-base text-white md:py-2 md:px-3 md:rounded-xl rounded text-[12px] w-full md:w-auto py-2"
-                                    onclick="handleOrderNow(this)" data-menu-id="{{$menu->id}}">Order Now</button>
+                                    onclick="handleOrderNow(this)" data-menu-id="{{$menu->id}}">Add To Cart</button>
                             </div>
                         </div>
                     </div>
@@ -96,9 +97,18 @@
         </div>
 
         <div id="myCart"
-            class="w-1/3 my-3 relative bg-white shadow-lg p-4 rounded-xl overflow-y-auto hidden lg:block dark:bg-[#1E2939]">
+            class="w-1/3 my-3 relative bg-white shadow-lg p-4 rounded-xl overflow-y-auto hidden lg:block dark:bg-[#1E2939] h-fit">
             <h2 class="text-lg font-semibold dark:text-darkMode">Customer Information</h2>
-            <form action="{{route('home.order')}}" method="post">
+            @if ($errors->any())
+            <div class="bg-red-500 text-white rounded-lg w-fit px-3 py-1">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            <form action="{{route('home.cart.store')}}" method="post">
                 @csrf
                 <div class="border border-gray-300 rounded-md p-2 w-full max-w-md my-2">
                     <label class="block text-sm font-semibold text-gray-800 mb-1 dark:text-darkMode">Customer
@@ -106,14 +116,14 @@
                     <input type="text" name="cust_name" placeholder="Your name..."
                         class="w-full text-gray-400 placeholder:text-gray-400 outline-none bg-transparent" />
                 </div>
-                <div class="border border-gray-300 rounded-md p-2 w-full max-w-md">
+                <div class="border border-gray-300 rounded-md p-2 w-full max-w-md mb-2">
                     <label class="block text-sm font-semibold text-gray-800 mb-1 dark:text-darkMode">Phone
                         Number</label>
                     <input type="text" name="phone" placeholder="Ex: 628..."
                         class="w-full text-gray-400 placeholder:text-gray-400 outline-none bg-transparent" />
                 </div>
 
-                <input type="text" name="cart" id="input_cart">
+                <input type="hidden" name="cart" id="input_cart">
 
                 <div class="mt-3">
                     <h2 class="text-lg font-semibold text-darkMode">Current Order</h2>
@@ -123,7 +133,7 @@
                             <div class="flex w-full h-full relative gap-2">
                                 <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                                     alt="order-thumb" class="rounded-lg object-cover w-1/3">
-    
+
                                 <div class="dark:text-darkMode">
                                     <h3 class="text-lg">Salad</h3>
                                     <div class="price">Rp.1.300.000</div>
@@ -152,7 +162,7 @@
                             <div class="font-semibold text-green-500" id="cart_total">Rp.0</div>
                         </div>
                     </div>
-                    <button class="w-full bg-black p-3 dark:text-darkMode rounded-full text-white">Order Now</button>
+                    <button class="w-full bg-black p-3 dark:text-darkMode rounded-full text-white cursor-pointer" onclick="localStorage.removeItem('cartItems')">Order Now</button>
                 </div>
             </form>
             <div id="closeButton" onclick="showCart()" class="top-0 right-0 absolute p-3 sm:hidden">
@@ -163,7 +173,8 @@
 </div>
 
 {{-- MODAL BOX --}}
-<div id="cart-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+<div id="cart-modal" tabindex="-1"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-2xl max-h-full">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
@@ -172,8 +183,7 @@
                 class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
                 <button type="button" id="cart-modal-close"
                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
-                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 14 14">
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                     </svg>
@@ -285,7 +295,7 @@
     // function closeCart(){
     //     const myCart = document.querySelector('#myCart');
     //     // const closeCart = document.querySelector('#closeButton')
-    //     myCart.classList.toggle('active')   
+    //     myCart.classList.toggle('active')
     // }
 
     async function handleOrderNow(button) {
@@ -295,7 +305,9 @@
         const modal = new Modal(document.getElementById('cart-modal'));
 
         menu_input.value = menuId;
-        const {data} = await getData(menuId);
+        const {
+            data
+        } = await getData(menuId);
 
         addToCartButton.onclick = () => handleAddToCart(data, modal);
 
@@ -315,9 +327,9 @@
     }
 
     function handleAddToCart(data, modal) {
-        console.log(data)
-        const notesInput = document.querySelector('#notes_input').value;
-        data['notes'] = notesInput;
+        // console.log(data)
+        const notesInput = document.querySelector('#notes_input');
+        data['notes'] = notesInput.value;
         // localStorage.setItem('cartItems', JSON.stringify([data]));
         let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
 
@@ -334,6 +346,7 @@
         // Save updated cart
         localStorage.setItem('cartItems', JSON.stringify(cart));
         renderCart();
+        notesInput.value = '';
         modal.hide();
     }
 
@@ -388,7 +401,7 @@
                             <div class="price">Rp.${item.price.toLocaleString('id-ID')}</div>
                             <div class="qty flex">
                                 <button class="minus inline-flex items-center justify-center w-10 h-10 bg-white rounded-full" id="qty_button" data-action="decrease" data-id="${item.id}">-</button>
-                                <input type="number" value="${item.quantity}" name="qty" min="0" class="text-center w-1/2">
+                                <input type="number" value="${item.quantity}" min="0" class="text-center w-1/2">
                                 <button class="plus inline-flex items-center justify-center w-10 h-10 bg-white rounded-full" id="qty_button" data-action="increase" data-id="${item.id}">+</button>
                             </div>
                         </div>

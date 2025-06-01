@@ -616,7 +616,7 @@
             <img src="{{asset('assets/images/user/owner.jpg')}}" alt="User" />
           </span>
 
-          <span class="text-theme-sm mr-1 block font-medium"> Musharof </span>
+          <span class="text-theme-sm mr-1 block font-medium"> {{ Auth::user()->name }} </span>
 
           <svg
             :class="dropdownOpen && 'rotate-180'"

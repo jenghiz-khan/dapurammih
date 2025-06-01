@@ -15,4 +15,9 @@ class Cart extends Model
     {
         return $this->belongsTo(Menu::class);
     }
+
+    // public function order()
+    // {
+    //     return $this->hasOne(Order::class);
+    // }
 }

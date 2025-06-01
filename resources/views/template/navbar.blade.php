@@ -1,8 +1,9 @@
 <nav class="bg-white border-gray-200 dark:bg-gray-900 sticky top-0 z-10">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <div class="dark:text-white">
-            <h1>Dapur ammih</h1>
+        <div class="dark:text-white flex items-center gap-2">
+            <img src="{{asset('assets/images/logo/logo.png')}}" alt="No Picture Added" class="rounded-full w-[50px] h-[50px] object-cover" />
         </div>
+        <h1 class="dark:text-white font-semibold">Dapur Ammih</h1>
         <div class="flex justify-center items-center gap-2 md:order-2">
             {{-- <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search"
                 aria-expanded="false"

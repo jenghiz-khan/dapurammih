@@ -53,12 +53,12 @@ class AdminMenuController extends Controller
         $menu->price = $request->price;
         $path = $request->file('image')->store('menu_img');
         $menu->image = $path;
-        
+
         if($menu->save()){
             Alert::toast('Successfully Inserted', 'success');
             return redirect()->route('menu.index');
         }
-        
+
         Alert::toast('Something error', 'Error');
         return redirect()->back();
     }
@@ -100,18 +100,17 @@ class AdminMenuController extends Controller
         $menu->desc = $request->desc;
         $menu->stock = $request->stock;
         $menu->price = $request->price;
-        $menu->best_menu = $request->best_menu;
         if($request->file('image')){
             $path = $request->file('image')->store('menu_img');
             $menu->image = $path;
         }
         // dd('gak ada');
-        
+
         if($menu->save()){
             Alert::toast('Successfully Inserted', 'success');
             return redirect()->route('menu.index');
         }
-        
+
         Alert::toast('Something error', 'Error');
         return redirect()->back();
     }
