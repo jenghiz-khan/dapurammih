@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Total Pembayaran | ResToGo</title>
-    
+    <title>Receipt Order</title>
+
     <!-- Tailwind CSS CDN (or use your own build process) -->
     {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
 
@@ -14,10 +14,10 @@
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
-    
+
     <!-- IonIcons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
-    
+
     <!-- Your custom CSS (if needed) -->
     {{-- <link rel="stylesheet" href="{{asset('assets/customer/css/cekout.css')}}"> --}}
     @vite('resources/css/app.css')
