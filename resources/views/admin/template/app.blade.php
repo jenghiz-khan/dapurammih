@@ -11,6 +11,7 @@
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
+    @yield('css')
 </head>
 
 <body

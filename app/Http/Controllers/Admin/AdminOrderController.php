@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Transaction;
+use App\Models\Transaction_detail;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -39,15 +40,31 @@ class AdminOrderController extends Controller
     public function transactionStore(Request $request, $orderId)
     {
         $transaction = new Transaction;
-        $transaction->order_id = $orderId;
+        $order = Order::find($orderId);
+        // dd($order->order_detail);
+        $transaction->customer_id = $order->customer_id;
+        $transaction->order_code = $order->order_code;
         $transaction->payment_method = $request->payment_method;
+        // dd($order->order_detail);
+        // dd($order->order_detail);
+        // $transaction->menu = $orderId;
         if($transaction->save()){
+            foreach ($order->order_detail as $item) {
+                $transaction_detail = new Transaction_detail;
+                $transaction_detail->transaction_id = $transaction->id;
+                $transaction_detail->menu = $item->menu->name;
+                $transaction_detail->qty = $item->qty;
+                $transaction_detail->price = $item->menu->price;
+                $transaction_detail->total = $item->menu->price * $item->qty;
+                $transaction_detail->save();
+            }
+
             $order = Order::find($orderId);
             $order->payment_status = 'done';
             $order->save();
 
             Alert::toast('Successfully Inserted', 'success');
-            return redirect()->route('admin.transaction.detail', $order->id);
+            return redirect()->route('admin.transaction.detail', $transaction->id);
         }
 
         Alert::toast('Something error', 'Error');

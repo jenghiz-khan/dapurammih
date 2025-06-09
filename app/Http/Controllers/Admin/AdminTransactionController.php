@@ -11,13 +11,15 @@ class AdminTransactionController extends Controller
     public function index()
     {
         $transactions = Transaction::all();
+        // $total = $transactions->transaction_detail->sum('total');
+        // dd($total);
         return view('admin.transaction.index', compact('transactions'));
     }
 
     public function detail($id)
     {
         $transaction = Transaction::find($id);
-        $total = $transaction->order->order_detail->sum('price');
+        $total = $transaction->transaction_detail->sum('total');
         // dd($transaction->order_code);
         return view('admin.transaction.invoice', compact('transaction', 'total'));
     }

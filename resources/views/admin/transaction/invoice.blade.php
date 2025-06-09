@@ -12,11 +12,11 @@
     <div class="max-w-2xl mx-auto bg-white rounded-lg p-8">
         <div class="flex items-center justify-between mb-6">
             <div class="text-lg font-medium">
-                <p>Hello, {{ $transaction->order->customer->name }}.</p>
+                <p>Hello, {{ $transaction->customer->name }}.</p>
             </div>
             <div class="text-right">
                 <h1 class="text-red-600 text-2xl font-semibold">Invoice</h1>
-                <p class="text-sm text-green-500">ORDER {{ $transaction->order->order_code }}</p>
+                <p class="text-sm text-green-500">ORDER {{ $transaction->order_code }}</p>
                 <p class="text-sm text-gray-500">{{ $transaction->created_at->toDateString() }}</p>
             </div>
         </div>
@@ -30,9 +30,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($transaction->order->order_detail as $detail)
+                @foreach ($transaction->transaction_detail as $detail)
                 <tr class="border-b border-gray-200">
-                    <td class="py-2 text-red-600">{{ $detail->menu->name }}</td>
+                    <td class="py-2 text-red-600">{{ $detail->menu }}</td>
                     <td class="py-2">{{ $detail->qty }}</td>
                     <td class="py-2 text-right">@rupiah($detail->price)</td>
                 </tr>

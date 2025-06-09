@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Menu;
+use App\Models\Order;
+use App\Models\Order_detail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -121,6 +123,17 @@ class AdminMenuController extends Controller
     public function destroy(string $id)
     {
         $menu = Menu::find($id);
+        $isUsed = Order_detail::where('menu_id', $id)
+        ->whereHas('order', function ($query) {
+            $query->where('payment_status', 'pending');
+        })
+        ->exists();
+        
+        if ($isUsed) {
+            Alert::toast('Cannot delete, menu is used in an order', 'error');
+            return redirect()->back();
+        }
+        
         if($menu){
             Storage::delete($menu->image);
             $menu->delete();
