@@ -28,7 +28,7 @@
                         <div class="swiper-wrapper py-3">
                             @foreach ($bestMenus as $bestMenu)
                             <div
-                                class="card swiper-slide rounded-2xl overflow-hidden p-2 dark:bg-[#1E2939] shadow-xl max-w-sm">
+                                class="card h-[390px] swiper-slide rounded-2xl overflow-hidden p-2 dark:bg-[#1E2939] shadow-xl max-w-sm">
                                 <img src="{{asset('storage/'.$bestMenu->image)}}" alt="menu"
                                     class="rounded-2xl md:w-[266px] md:h-[266px] w-[164px] h-[164px] m-auto object-fill">
                                 <div class="card-body py-2">
@@ -70,7 +70,7 @@
 
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     @foreach ($menus as $menu)
-                    <div class="card swiper-slide rounded-2xl overflow-hidden p-2 dark:bg-[#1E2939] shadow-xl max-w-sm">
+                    <div class="card swiper-slide rounded-2xl overflow-hidden h-[390px] p-2 dark:bg-[#1E2939] shadow-xl max-w-sm">
                         <img src="{{asset('storage/'.$menu->image)}}" alt="menu"
                             class="rounded-2xl md:w-[266px] md:h-[266px] w-[164px] h-[164px] m-auto object-fill">
                         <div class="card-body py-2">

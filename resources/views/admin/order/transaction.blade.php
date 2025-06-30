@@ -78,13 +78,13 @@
     </div>
 
     <!-- Footer -->
-    <div class="mt-10 text-center text-sm text-muted-foreground dark:text-muted">
+    {{-- <div class="mt-10 text-center text-sm text-muted-foreground dark:text-muted">
         <p>
             Copyright © 2023 <span class="font-semibold text-blue-600 dark:text-blue-400">ResToGo</span>. All rights
             reserved.
         </p>
         <p class="mt-1">Version <span class="font-semibold">1.0.0</span></p>
-    </div>
+    </div> --}}
 </div>
 
 @endsection

@@ -144,7 +144,11 @@ text-center">Tambah Data</a> --}}
         <tfoot>
             <tr>
                 <td>Total</td>
-                <td colspan="4"></td>
+                {{-- <td colspan="4"></td> --}}
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td></td>
             </tr>
         </tfoot>
@@ -169,7 +173,6 @@ text-center">Tambah Data</a> --}}
 <script>
     let minDate, maxDate;
 
-    // Custom filtering function which will search data in column four between two values
     DataTable.ext.search.push(function (settings, data, dataIndex) {
         let min = minDate.val();
         let max = maxDate.val();
@@ -205,9 +208,10 @@ text-center">Tambah Data</a> --}}
             topStart: {
                 buttons: [{
                     extend: 'print',
+                    footer: 'true',
                     className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm',
                     exportOptions: {
-                        columns: [0, 1, 2, 3]
+                        columns: [0, 1, 2, 3, 4]
                     }
                 }, ]
             }
@@ -215,7 +219,6 @@ text-center">Tambah Data</a> --}}
         footerCallback: function (row, data, start, end, display) {
         let api = this.api();
 
-        // Helper function to remove formatting
         let parsePrice = function (val) {
         let div = document.createElement('div');
         div.innerHTML = val;
@@ -229,25 +232,21 @@ text-center">Tambah Data</a> --}}
         ) || 0;
     };
 
-        // Calculate total
         let total = api
-            .column(3, { search: 'applied' }) // Index 3 is the "Price" column
+            .column(3, { search: 'applied' }) 
             .data()
             .reduce((acc, val) => acc + parsePrice(val), 0);
 
-        // Format back to IDR
         let formatted = new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR',
             minimumFractionDigits: 0
         }).format(total);
 
-        // Update footer
-        $(api.column(5).footer()).html(formatted);
+        $(api.column(3).footer()).html(formatted);
     }
     });
 
-    // Refilter the table
     document.querySelectorAll('#min, #max').forEach((el) => {
         el.addEventListener('change', () => table.draw());
     });

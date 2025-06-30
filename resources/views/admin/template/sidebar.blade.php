@@ -17,8 +17,10 @@
     :class="sidebarToggle ? 'justify-center' : 'justify-between'"
     class="flex items-center gap-2 pt-8 sidebar-header pb-7"
   >
-    <a href="index.html">
-      <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
+    <a href="{{route('admin.dashboard')}}" class="dark:text-white flex items-center gap-2">
+     <img src="{{asset('assets/images/logo/logo.png')}}" alt="No Picture Added" class="rounded-full w-[50px] h-[50px] object-cover" />
+      DapurAmmih
+      {{-- <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
         <img class="dark:hidden" src="{{asset('assets/images/logo/logo.svg')}}" alt="Logo" />
         <img
           class="hidden dark:block"
@@ -32,7 +34,7 @@
         :class="sidebarToggle ? 'lg:block' : 'hidden'"
         src="{{asset('assets/images/logo/logo-icon.svg')}}"
         alt="Logo"
-      />
+      /> --}}
     </a>
   </div>
   <!-- SIDEBAR HEADER -->

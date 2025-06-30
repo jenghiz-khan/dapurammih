@@ -8,8 +8,8 @@
     <title>
         @yield('title', 'Dashboard')
     </title>
-    @vite('resources/css/app.css')
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+    @vite('resources/css/app.css')
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
     @yield('css')
 </head>

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('menu_id');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
-            $table->string('qty');
-            $table->string('price');
+            $table->string('qty', 20);
+            $table->string('price', 50);
             $table->text('notes')->nullable();
             $table->timestamps();
         });

@@ -3,7 +3,7 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-<div class="grid grid-cols-3 gap-5">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
     <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800">
             <svg class="fill-gray-800 dark:fill-white/90" width="24" height="24" viewBox="0 0 24 24" fill="none"

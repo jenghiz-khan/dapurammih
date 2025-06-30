@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('transaction_id')->nullable();
             $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
-            $table->string('menu');
-            $table->string('qty');
-            $table->string('price');
-            $table->string('total');
+            $table->string('menu', 100);
+            $table->string('qty', 20);
+            $table->string('price', 50);
+            $table->string('total', 50);
             $table->timestamps();
         });
     }

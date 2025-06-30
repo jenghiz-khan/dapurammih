@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name', 100);
             $table->foreignId('category_id')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->text('desc')->nullable();
             $table->integer('stock');
-            $table->string('price');
+            $table->string('price', 50);
             $table->string('image');
             $table->enum('best_menu', ['true', 'false'])->default('false');
             $table->timestamps();

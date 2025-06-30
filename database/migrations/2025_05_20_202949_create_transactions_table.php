@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->nullable();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
-            $table->string('order_code')->unique();
-            $table->string('payment_method');
+            $table->string('order_code', 20)->unique();
+            $table->string('payment_method', 20);
             $table->timestamps();
         });
     }

@@ -18,10 +18,18 @@ Route::post('cart/order/{customerId}', [IndexController::class, 'orderStore'])->
 Route::get('cart/order/qris/{customerId}', [IndexController::class, 'qris'])->name('home.order.qris');
 
 Route::prefix('admin')->group(function (){
+
+    Route::get('/', function () {
+        return redirect()->route('admin.login');
+    });
+
     Route::get('login', [AuthAdminController::class, 'login'])->name('admin.login');
     Route::post('login', [AuthAdminController::class, 'authenticate'])->name('admin.authenticate');
     Route::post('logout', [AuthAdminController::class, 'logout'])->name('admin.logout');
     Route::get('register', [AuthAdminController::class, 'register'])->name('admin.register');
+
+    Route::get('change-password', [AuthAdminController::class, 'changePassword'])->name('admin.changePassword');
+    Route::post('change-password', [AuthAdminController::class, 'changePasswordStore'])->name('admin.changePassword.store');
 
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
