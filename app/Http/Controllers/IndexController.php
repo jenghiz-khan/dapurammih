@@ -38,8 +38,15 @@ class IndexController extends Controller
         $validated = $request->validate([
             'cust_name' => 'required',
             'phone' => 'required',
-            'cart' => 'required',
+            'cart' => ['required', function ($attribute, $value, $fail) {
+                        $items = json_decode($value, true);
+                        if (!is_array($items) || empty($items)) {
+                            $fail('The cart cannot be empty.');
+                        }
+                    }],
         ]);
+
+        // dd($request->all());
 
         $customer = new Customer;
         $order = new Order;
