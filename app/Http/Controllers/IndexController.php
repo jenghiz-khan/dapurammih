@@ -18,9 +18,15 @@ class IndexController extends Controller
     public function index($categoryId = '') 
     {
         // dd($categoryId);
-        $menus = $categoryId ? Menu::where('category_id', $categoryId)->get() : Menu::all();;
+        $menus = $categoryId ? Menu::where([
+            ['category_id', '=' ,$categoryId],
+            ['stock', '>' , 0]
+        ])->get() : Menu::where('stock', '>', 0)->get();
         $categories = Category::all();
-        $bestMenus = Menu::where('best_menu', 'true')->get();
+        $bestMenus = Menu::where([
+            ['best_menu', '=' ,'true'],
+            ['stock', '>' , 0]
+        ])->get();
 
         return view('index', compact('menus', 'bestMenus', 'categories'));
     }
@@ -48,6 +54,20 @@ class IndexController extends Controller
 
         // dd($request->all());
 
+        $cart_request = json_decode($request->cart);
+
+        foreach ($cart_request as $item) {
+            $menu = Menu::find($item->id);
+            $is_stock_sufficient = $menu->stock - $item->quantity < 0 ? true : false;
+            if($is_stock_sufficient){
+                // stok habis
+                return redirect()->back()->withErrors(['msg' => $menu->name . ' is out of stock']);
+            }
+            // Stok cukup
+            // $menu->stock = $menu->stock - $item->quantity;
+            // $menu->save();
+        }
+
         $customer = new Customer;
         $order = new Order;
         // $order_detail = new Order_detail;
@@ -63,7 +83,6 @@ class IndexController extends Controller
         $order->payment_status = 'pending';
         $order->save();
 
-        $cart_request = json_decode($request->cart);
         foreach ($cart_request as $item) {
             $order_detail = new Order_detail;
             $order_detail->order_id = $order->id;
@@ -71,7 +90,10 @@ class IndexController extends Controller
             $order_detail->qty = $item->quantity;
             $order_detail->price = $item->price * $item->quantity;
             $order_detail->notes = $item->notes;
-            $order_detail->save();
+            if($order_detail->save()){
+                $menu->stock = $menu->stock - $item->quantity;
+                $menu->save();
+            }
         }
 
         // if($request->pay_method == 'cash'){

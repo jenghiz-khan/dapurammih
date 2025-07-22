@@ -401,7 +401,7 @@
                             <div class="price">Rp.${item.price.toLocaleString('id-ID')}</div>
                             <div class="qty flex">
                                 <button class="minus inline-flex items-center justify-center w-10 h-10 bg-white rounded-full" id="qty_button" data-action="decrease" data-id="${item.id}">-</button>
-                                <input type="number" value="${item.quantity}" min="0" class="text-center w-1/2">
+                                <input type="number" id="qty_input" value="${item.quantity}" min="0" data-id="${item.id}" class="text-center w-1/2">
                                 <button class="plus inline-flex items-center justify-center w-10 h-10 bg-white rounded-full" id="qty_button" data-action="increase" data-id="${item.id}">+</button>
                             </div>
                         </div>
@@ -413,12 +413,47 @@
                 `;
 
             cardCart.appendChild(card);
+
+            const qtyInput = document.querySelectorAll('#qty_input');
+            qtyInput.forEach(input => {
+                input.addEventListener('input', function () {
+                    let newQty = parseInt(input.value);
+                    if (newQty < 1 || isNaN(newQty)) {
+                        newQty = 1;
+                    }
+
+                    // let cart = JSON.parse(localStorage.getItem('cartItems'));
+                    const id = input.getAttribute('data-id');
+                    console.log(item.id);
+
+                    updateCartQtyDirect(id, newQty)
+                    // console.log(qtyInput.value);
+                })
+            })
+            // qtyInput.addEventListener('input', function () {
+            //     let cart = JSON.parse(localStorage.getItem('cartItems'));
+            //     const id = qtyInput.getAttribute('data-id');
+            //     const itemIndex = cart.findIndex(item => item.id == id);
+            //     cart[itemIndex].quantity = qtyInput.value;
+            //     localStorage.setItem('cartItems', JSON.stringify(cart));
+            //     // console.log(qtyInput.value);
+            // })
         });
 
         setupDeleteButtons();
         setQtyButton();
 
         updateTotal(total)
+    }
+
+    function updateCartQtyDirect(id, newQty) {
+        let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const index = cart.findIndex(item => item.id == id);
+        if (index !== -1) {
+            cart[index].quantity = newQty;
+            localStorage.setItem('cartItems', JSON.stringify(cart));
+            renderCart();
+        }
     }
 
     function setQtyButton() {
